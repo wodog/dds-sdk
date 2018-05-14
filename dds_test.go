@@ -18,10 +18,7 @@ var d = dds.New(m)
 func TestUrl(t *testing.T) {
 	id := "123456"
 	url := d.Url(id)
-	parsedId, err := d.ParseUrl(url)
-	if err != nil {
-		t.Fatal(err)
-	}
+	parsedId := d.ParseUrl(url)
 	if id != parsedId {
 		t.Fatal("id != parsedId")
 	}

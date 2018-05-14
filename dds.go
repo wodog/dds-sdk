@@ -31,13 +31,9 @@ func (d *DDS) Url(id string) string {
 }
 
 // 解析url,  返回id
-func (d *DDS) ParseUrl(url string) (string, error) {
+func (d *DDS) ParseUrl(url string) string {
 	ss := strings.Split(url, "/")
-	if len(ss) == 0 {
-		return "", errors.New("url格式不正确")
-	}
-	id := ss[len(ss)-1]
-	return id, nil
+	return ss[len(ss)-1]
 }
 
 // 上传文件
