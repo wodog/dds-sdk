@@ -3,7 +3,7 @@ package dds
 import "time"
 
 type File struct {
-	ID        string    `json:"_id"`
+	ID        string    `json:"id"`
 	Name      string    `json:"name"`
 	Bucket    string    `json:"bucket"`
 	Size      int64     `json:"size"`
