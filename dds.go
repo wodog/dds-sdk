@@ -27,7 +27,7 @@ func New(m map[string]string) *DDS {
 
 // 根据id获取url地址
 func (d *DDS) Url(id string) string {
-	return fmt.Sprintf("%s/files/%s", d.host, id)
+	return fmt.Sprintf("%s/api/files/%s", d.host, id)
 }
 
 // 解析url,  返回id
@@ -38,7 +38,7 @@ func (d *DDS) ParseUrl(url string) string {
 
 // 上传文件
 func (d *DDS) Upload(name string, r io.Reader) (string, error) {
-	url := fmt.Sprintf("%s/buckets/%s/files", d.host, d.bucket)
+	url := fmt.Sprintf("%s/api/uckets/%s/files", d.host, d.bucket)
 
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
@@ -87,7 +87,7 @@ func (d *DDS) Open(id string) (io.ReadCloser, error) {
 
 // 删除文件
 func (d *DDS) Delete(id string) error {
-	url := fmt.Sprintf("%s/buckets/%s/files/%s", d.host, d.bucket, id)
+	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, id)
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		return err
@@ -108,7 +108,7 @@ func (d *DDS) Delete(id string) error {
 }
 
 func (d *DDS) Stat(id string) (*File, error) {
-	url := fmt.Sprintf("%s/buckets/%s/files/%s", d.host, d.bucket, id)
+	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, id)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
