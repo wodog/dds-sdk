@@ -38,7 +38,7 @@ func (d *DDS) ParseUrl(url string) string {
 
 // 上传文件
 func (d *DDS) Upload(name string, r io.Reader) (string, error) {
-	url := fmt.Sprintf("%s/api/uckets/%s/files", d.host, d.bucket)
+	url := fmt.Sprintf("%s/api/buckets/%s/files", d.host, d.bucket)
 
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
