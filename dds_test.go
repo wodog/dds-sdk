@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+	"time"
 
 	dds "github.com/wodog/dds-sdk"
 )
@@ -29,19 +30,19 @@ func Test(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	id, err := d.Upload(file.Name(), file)
+	_, err = d.Upload(file.Name(), file)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	f, err := d.Stat(id)
+	f, err := d.Stat(file.Name())
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Println("文件信息:")
 	fmt.Println(f)
 
-	r, err := d.Open(id)
+	r, err := d.Open(file.Name())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -53,7 +54,9 @@ func Test(t *testing.T) {
 	fmt.Println("文件内容:")
 	fmt.Println(string(b))
 
-	err = d.Delete(id)
+	time.Sleep(5 * time.Second)
+
+	err = d.Delete(file.Name())
 	if err != nil {
 		t.Fatal(err)
 	}

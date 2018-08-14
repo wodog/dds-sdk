@@ -25,12 +25,12 @@ func New(m map[string]string) *DDS {
 	}
 }
 
-// 根据id获取url地址
-func (d *DDS) Url(id string) string {
-	return fmt.Sprintf("%s/api/files/%s", d.host, id)
+// 根据name获取url地址
+func (d *DDS) Url(name string) string {
+	return fmt.Sprintf("%s/api/buckets/%s/view/%s", d.host, d.bucket, name)
 }
 
-// 解析url,  返回id
+// 解析url,  返回name
 func (d *DDS) ParseUrl(url string) string {
 	ss := strings.Split(url, "/")
 	return ss[len(ss)-1]
@@ -71,8 +71,8 @@ func (d *DDS) Upload(name string, r io.Reader) (string, error) {
 }
 
 // 打开文件流
-func (d *DDS) Open(id string) (io.ReadCloser, error) {
-	url := d.Url(id)
+func (d *DDS) Open(name string) (io.ReadCloser, error) {
+	url := d.Url(name)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -86,8 +86,8 @@ func (d *DDS) Open(id string) (io.ReadCloser, error) {
 }
 
 // 删除文件
-func (d *DDS) Delete(id string) error {
-	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, id)
+func (d *DDS) Delete(name string) error {
+	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, name)
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		return err
@@ -107,8 +107,8 @@ func (d *DDS) Delete(id string) error {
 	return nil
 }
 
-func (d *DDS) Stat(id string) (*File, error) {
-	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, id)
+func (d *DDS) Stat(name string) (*File, error) {
+	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, name)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
