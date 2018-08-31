@@ -15,6 +15,7 @@ import (
 type DDS struct {
 	host   string
 	bucket string
+	token  string
 }
 
 // 传入map配置返回DDS实例
@@ -22,6 +23,7 @@ func New(m map[string]string) *DDS {
 	return &DDS{
 		host:   m["host"],
 		bucket: m["bucket"],
+		token:  m["token"],
 	}
 }
 
@@ -53,6 +55,7 @@ func (d *DDS) Upload(name string, r io.Reader) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	req.Header.Set("SSO-TOKEN", d.token)
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -77,6 +80,7 @@ func (d *DDS) Open(name string) (io.ReadCloser, error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("SSO-TOKEN", d.token)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -92,6 +96,7 @@ func (d *DDS) Delete(name string) error {
 	if err != nil {
 		return err
 	}
+	req.Header.Set("SSO-TOKEN", d.token)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
@@ -113,6 +118,7 @@ func (d *DDS) Stat(name string) (*File, error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("SSO-TOKEN", d.token)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
