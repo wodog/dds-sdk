@@ -10,11 +10,7 @@ import (
 	dds "github.com/wodog/dds-sdk"
 )
 
-var m = map[string]string{
-	"host":   "http://localhost:8080",
-	"bucket": "test",
-}
-var d = dds.New(m)
+var d = dds.New("http://dds.deepblue.com", "test", "")
 
 func TestUrl(t *testing.T) {
 	id := "123456"
@@ -54,7 +50,7 @@ func Test(t *testing.T) {
 	fmt.Println("文件内容:")
 	fmt.Println(string(b))
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(10 * time.Second)
 
 	err = d.Delete(file.Name())
 	if err != nil {
