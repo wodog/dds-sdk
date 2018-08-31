@@ -13,23 +13,23 @@ import (
 )
 
 type DDS struct {
-	host   string
-	bucket string
-	token  string
+	Host   string
+	Bucket string
+	Token  string
 }
 
 // 传入map配置返回DDS实例
-func New(m map[string]string) *DDS {
+func New(host, bucket, token string) *DDS {
 	return &DDS{
-		host:   m["host"],
-		bucket: m["bucket"],
-		token:  m["token"],
+		Host:   host,
+		Bucket: bucket,
+		Token:  token,
 	}
 }
 
 // 根据name获取url地址
 func (d *DDS) Url(name string) string {
-	return fmt.Sprintf("%s/api/buckets/%s/view/%s", d.host, d.bucket, name)
+	return fmt.Sprintf("%s/api/buckets/%s/view/%s", d.Host, d.Bucket, name)
 }
 
 // 解析url,  返回name
@@ -40,7 +40,7 @@ func (d *DDS) ParseUrl(url string) string {
 
 // 上传文件
 func (d *DDS) Upload(name string, r io.Reader) (string, error) {
-	url := fmt.Sprintf("%s/api/buckets/%s/files", d.host, d.bucket)
+	url := fmt.Sprintf("%s/api/buckets/%s/files", d.Host, d.Bucket)
 
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
@@ -55,7 +55,7 @@ func (d *DDS) Upload(name string, r io.Reader) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	req.Header.Set("SSO-TOKEN", d.token)
+	req.Header.Set("SSO-TOKEN", d.Token)
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -80,7 +80,7 @@ func (d *DDS) Open(name string) (io.ReadCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("SSO-TOKEN", d.token)
+	req.Header.Set("SSO-TOKEN", d.Token)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -91,12 +91,12 @@ func (d *DDS) Open(name string) (io.ReadCloser, error) {
 
 // 删除文件
 func (d *DDS) Delete(name string) error {
-	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, name)
+	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.Host, d.Bucket, name)
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		return err
 	}
-	req.Header.Set("SSO-TOKEN", d.token)
+	req.Header.Set("SSO-TOKEN", d.Token)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
@@ -113,12 +113,12 @@ func (d *DDS) Delete(name string) error {
 }
 
 func (d *DDS) Stat(name string) (*File, error) {
-	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.host, d.bucket, name)
+	url := fmt.Sprintf("%s/api/buckets/%s/files/%s", d.Host, d.Bucket, name)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("SSO-TOKEN", d.token)
+	req.Header.Set("SSO-TOKEN", d.Token)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
